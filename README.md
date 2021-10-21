@@ -1,11 +1,11 @@
 # Spring Custom Scopes
-There are two main common non-web scopes in Spring:
+There are two main common non-web scope in Spring:
 - **singleton**\
   Returns the same instance each time bean is accessed.
 - **prototype**\
   Returns a new instance each time bean is accessed.
   
-Create three custom scopes for spring beans to use them in Java Configuration:
+Create three custom scope for spring beans to use them in Java Configuration:
 - **threeTimes**\
   Beans of this scope must return a new instance after accessing them 3 times.   
 - **thread**\
@@ -15,7 +15,7 @@ Create three custom scopes for spring beans to use them in Java Configuration:
   So, once bean instance is created, it lives next second, and context must return it each time the bean is accessed.
   When accessing the bean and the instance in expired, context must return a new instance, that will be available next second.
   
-Register scopes in following config classes:
+Register scope in following config classes:
 - [ThreeTimesScopeConfig](src/main/java/com/rd/epam/autotasks/scopes/config/ThreeTimesScopeConfig.java)
 - [ThreadScopeConfig](src/main/java/com/rd/epam/autotasks/scopes/config/ThreadScopeConfig.java)
 - [JustASecondScopeConfig](src/main/java/com/rd/epam/autotasks/scopes/config/JustASecondScopeConfig.java)

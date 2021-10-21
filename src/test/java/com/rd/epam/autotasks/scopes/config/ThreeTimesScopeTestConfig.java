@@ -20,5 +20,4 @@ public class ThreeTimesScopeTestConfig {
     public Object threeTimesBean2() {
         return new Object();
     }
-
 }

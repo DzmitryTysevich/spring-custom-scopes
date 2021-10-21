@@ -20,5 +20,4 @@ public class ThreadScopeTestConfig {
     public Object threadBean2() {
         return new Object();
     }
-
 }
