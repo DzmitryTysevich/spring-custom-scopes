@@ -9,27 +9,36 @@ import java.util.Map;
 
 public class JustASecondScope implements Scope {
     private final Map<String, Object> scopedObjects = Collections.synchronizedMap(new HashMap<>());
+    private final long SECOND_IN_MILLIS = 1000L;
     private long lastTime = System.currentTimeMillis();
-    private long timeInterval;
+    private long objectsCreationTime;
 
     @Override
     public Object get(String s, ObjectFactory<?> objectFactory) {
         long currentTime = System.currentTimeMillis();
-        getTimeInterval(currentTime);
+        calculateObjectsCreationTime(currentTime);
 
-        if (timeInterval >= 1000) {
+        if (isaCreationPerSecond()) {
             scopedObjects.clear();
-            timeInterval = 0;
+            objectsCreationTime = 0L;
         }
-        if (scopedObjects.get(s) == null) {
+        if (!scopedObjects.containsKey(s)) {
             scopedObjects.put(s, objectFactory.getObject());
         }
         lastTime = System.currentTimeMillis();
         return scopedObjects.get(s);
     }
 
-    private void getTimeInterval(long currentTime) {
-        timeInterval += currentTime - lastTime;
+    private void calculateObjectsCreationTime(long currentTime) {
+        objectsCreationTime += getObjectCreationTime(currentTime);
+    }
+
+    private boolean isaCreationPerSecond() {
+        return objectsCreationTime >= SECOND_IN_MILLIS;
+    }
+
+    private long getObjectCreationTime(long currentTime) {
+        return currentTime - lastTime;
     }
 
     @Override

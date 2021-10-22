@@ -15,7 +15,7 @@ public class ThreadScope implements Scope {
     @Override
     public Object get(String s, ObjectFactory<?> objectFactory) {
         Thread currentThread = Thread.currentThread();
-        if (scopedObjects.get(s) == null) {
+        if (!scopedObjects.containsKey(s)) {
             scopedObjects.put(s, objectFactory.getObject());
             threadObjects.put(currentThread, scopedObjects.get(s));
         }

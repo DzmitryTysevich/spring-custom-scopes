@@ -9,15 +9,16 @@ import java.util.Map;
 
 public class ThreeTimesScope implements Scope {
     private final Map<String, Object> scopedObjects = Collections.synchronizedMap(new HashMap<>());
+    private final int INTERVAL = 3;
     private int objectCounter;
 
     @Override
     public Object get(String s, ObjectFactory<?> objectFactory) {
-        if (objectCounter == 3) {
+        if (objectCounter == INTERVAL) {
             scopedObjects.clear();
             objectCounter = 0;
         }
-        if (scopedObjects.get(s) == null) {
+        if (!scopedObjects.containsKey(s)) {
             scopedObjects.put(s, objectFactory.getObject());
         }
         objectCounter++;
