@@ -3,23 +3,20 @@ package scope;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ThreadScope implements Scope {
-    private final Map<String, Object> scopedObjects = Collections.synchronizedMap(new HashMap<>());
-    private final ConcurrentHashMap<Thread, Object> threadObjects = new ConcurrentHashMap<>();
+    private final Map<String, Map<Thread, Object>> threadObjects = new ConcurrentHashMap<>();
 
     @Override
     public Object get(String s, ObjectFactory<?> objectFactory) {
         Thread currentThread = Thread.currentThread();
-        if (!scopedObjects.containsKey(s)) {
-            scopedObjects.put(s, objectFactory.getObject());
-            threadObjects.put(currentThread, scopedObjects.get(s));
+        if (!threadObjects.containsKey(s)) {
+            threadObjects.put(s, new ConcurrentHashMap<>());
+            threadObjects.get(s).put(currentThread, objectFactory.getObject());
         }
-        return threadObjects.get(currentThread);
+        return threadObjects.get(s).get(currentThread);
     }
 
     @Override
