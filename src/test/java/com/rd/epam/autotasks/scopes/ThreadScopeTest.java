@@ -4,6 +4,7 @@ import com.rd.epam.autotasks.scopes.config.ThreadScopeTestConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
@@ -76,5 +77,4 @@ class ThreadScopeTest {
             }
         }
     }
-
 }

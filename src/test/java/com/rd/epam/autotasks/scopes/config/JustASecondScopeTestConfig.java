@@ -20,5 +20,4 @@ public class JustASecondScopeTestConfig {
     public Object jasBean2() {
         return new Object();
     }
-
 }
