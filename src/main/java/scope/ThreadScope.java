@@ -4,14 +4,14 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 import org.springframework.core.NamedThreadLocal;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ThreadScope implements Scope {
     private final ThreadLocal<Map<String, Object>> threadScope = new NamedThreadLocal<>("ThreadScope") {
         @Override
         protected Map<String, Object> initialValue() {
-            return new ConcurrentHashMap<>();
+            return new HashMap<>();
         }
     };
 
