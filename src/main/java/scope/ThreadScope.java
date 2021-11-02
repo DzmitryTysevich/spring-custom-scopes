@@ -7,16 +7,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ThreadScope implements Scope {
-    private final Map<String, Map<Thread, Object>> threadObjects = new ConcurrentHashMap<>();
+    private final Map<String, ThreadLocal<Object>> threadObjects = new ConcurrentHashMap<>();
 
     @Override
     public Object get(String s, ObjectFactory<?> objectFactory) {
-        Thread currentThread = Thread.currentThread();
         if (!threadObjects.containsKey(s)) {
-            threadObjects.put(s, new ConcurrentHashMap<>());
-            threadObjects.get(s).put(currentThread, objectFactory.getObject());
+            ThreadLocal<Object> threadLocal = new ThreadLocal<>();
+            threadLocal.set(objectFactory.getObject());
+            threadObjects.put(s, threadLocal);
         }
-        return threadObjects.get(s).get(currentThread);
+        return threadObjects.get(s).get();
     }
 
     @Override
