@@ -2,21 +2,25 @@ package scope;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
+import org.springframework.core.NamedThreadLocal;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ThreadScope implements Scope {
-    private final Map<String, ThreadLocal<Object>> threadObjects = new ConcurrentHashMap<>();
+    private final ThreadLocal<Map<String, Object>> threadScope = new NamedThreadLocal<>("ThreadScope") {
+        @Override
+        protected Map<String, Object> initialValue() {
+            return new ConcurrentHashMap<>();
+        }
+    };
 
     @Override
     public Object get(String s, ObjectFactory<?> objectFactory) {
-        if (!threadObjects.containsKey(s)) {
-            ThreadLocal<Object> threadLocal = new ThreadLocal<>();
-            threadLocal.set(objectFactory.getObject());
-            threadObjects.put(s, threadLocal);
+        if (!threadScope.get().containsKey(s)) {
+            threadScope.get().put(s, objectFactory.getObject());
         }
-        return threadObjects.get(s).get();
+        return threadScope.get().get(s);
     }
 
     @Override
